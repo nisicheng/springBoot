@@ -22,6 +22,7 @@ public class LoginController {
 
         Subject subject = SecurityUtils.getSubject();
         UsernamePasswordToken token = new UsernamePasswordToken(user.getName(), user.getPassword());
+        System.out.println("11111");
         try {
            subject.login(token);
             return "ok";
