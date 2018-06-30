@@ -1,0 +1,15 @@
+server:
+  port: 8081
+spring:
+  datasource:
+    driver-class-name: com.mysql.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/cms?useUnicode=true&characterEncoding=utf8
+    username: "root"
+    password: "root"
+mybatis:
+   mapperLocations: classpath:/mapper/*.xml
+   typeAliasesPackage: com.example.demo.entity map-underscore-to-camel-case=true
+   #开启驼峰转换
+   configuration:
+     map-underscore-to-camel-case: true
+

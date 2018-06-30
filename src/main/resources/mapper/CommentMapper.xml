@@ -1,0 +1,150 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.demo.dao.CommentMapper">
+  <resultMap id="BaseResultMap" type="com.example.demo.entity.Comment">
+    <result column="id" jdbcType="INTEGER" property="id" />
+    <result column="articleId" jdbcType="INTEGER" property="articleid" />
+    <result column="content" jdbcType="VARCHAR" property="content" />
+    <result column="nickname" jdbcType="VARCHAR" property="nickname" />
+    <result column="userId" jdbcType="INTEGER" property="userid" />
+    <result column="userIP" jdbcType="VARCHAR" property="userip" />
+    <result column="commentDate" jdbcType="DATE" property="commentdate" />
+    <result column="commentsTargetCommentsId" jdbcType="INTEGER" property="commentstargetcommentsid" />
+  </resultMap>
+  <insert id="insert" parameterType="com.example.demo.entity.Comment">
+    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Integer">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into comment (articleId, content, nickname, 
+      userId, userIP, commentDate, 
+      commentsTargetCommentsId)
+    values (#{articleid,jdbcType=INTEGER}, #{content,jdbcType=VARCHAR}, #{nickname,jdbcType=VARCHAR}, 
+      #{userid,jdbcType=INTEGER}, #{userip,jdbcType=VARCHAR}, #{commentdate,jdbcType=DATE}, 
+      #{commentstargetcommentsid,jdbcType=INTEGER})
+  </insert>
+  <insert id="insertSelective" parameterType="com.example.demo.entity.Comment">
+    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Integer">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into comment
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="articleid != null">
+        articleId,
+      </if>
+      <if test="content != null">
+        content,
+      </if>
+      <if test="nickname != null">
+        nickname,
+      </if>
+      <if test="userid != null">
+        userId,
+      </if>
+      <if test="userip != null">
+        userIP,
+      </if>
+      <if test="commentdate != null">
+        commentDate,
+      </if>
+      <if test="commentstargetcommentsid != null">
+        commentsTargetCommentsId,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="articleid != null">
+        #{articleid,jdbcType=INTEGER},
+      </if>
+      <if test="content != null">
+        #{content,jdbcType=VARCHAR},
+      </if>
+      <if test="nickname != null">
+        #{nickname,jdbcType=VARCHAR},
+      </if>
+      <if test="userid != null">
+        #{userid,jdbcType=INTEGER},
+      </if>
+      <if test="userip != null">
+        #{userip,jdbcType=VARCHAR},
+      </if>
+      <if test="commentdate != null">
+        #{commentdate,jdbcType=DATE},
+      </if>
+      <if test="commentstargetcommentsid != null">
+        #{commentstargetcommentsid,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  <resultMap id="BaseResultMap" type="com.example.demo.entity.Comment">
+    <result column="id" jdbcType="INTEGER" property="id" />
+    <result column="articleId" jdbcType="INTEGER" property="articleid" />
+    <result column="content" jdbcType="VARCHAR" property="content" />
+    <result column="nickname" jdbcType="VARCHAR" property="nickname" />
+    <result column="userId" jdbcType="INTEGER" property="userid" />
+    <result column="userIP" jdbcType="VARCHAR" property="userip" />
+    <result column="commentDate" jdbcType="DATE" property="commentdate" />
+    <result column="commentsTargetCommentsId" jdbcType="INTEGER" property="commentstargetcommentsid" />
+  </resultMap>
+  <insert id="insert" parameterType="com.example.demo.entity.Comment">
+    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Integer">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into comment (articleId, content, nickname, 
+      userId, userIP, commentDate, 
+      commentsTargetCommentsId)
+    values (#{articleid,jdbcType=INTEGER}, #{content,jdbcType=VARCHAR}, #{nickname,jdbcType=VARCHAR}, 
+      #{userid,jdbcType=INTEGER}, #{userip,jdbcType=VARCHAR}, #{commentdate,jdbcType=DATE}, 
+      #{commentstargetcommentsid,jdbcType=INTEGER})
+  </insert>
+  <insert id="insertSelective" parameterType="com.example.demo.entity.Comment">
+    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Integer">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into comment
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="articleid != null">
+        articleId,
+      </if>
+      <if test="content != null">
+        content,
+      </if>
+      <if test="nickname != null">
+        nickname,
+      </if>
+      <if test="userid != null">
+        userId,
+      </if>
+      <if test="userip != null">
+        userIP,
+      </if>
+      <if test="commentdate != null">
+        commentDate,
+      </if>
+      <if test="commentstargetcommentsid != null">
+        commentsTargetCommentsId,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="articleid != null">
+        #{articleid,jdbcType=INTEGER},
+      </if>
+      <if test="content != null">
+        #{content,jdbcType=VARCHAR},
+      </if>
+      <if test="nickname != null">
+        #{nickname,jdbcType=VARCHAR},
+      </if>
+      <if test="userid != null">
+        #{userid,jdbcType=INTEGER},
+      </if>
+      <if test="userip != null">
+        #{userip,jdbcType=VARCHAR},
+      </if>
+      <if test="commentdate != null">
+        #{commentdate,jdbcType=DATE},
+      </if>
+      <if test="commentstargetcommentsid != null">
+        #{commentstargetcommentsid,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+</mapper>
