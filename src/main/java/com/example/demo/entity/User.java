@@ -1,62 +1,53 @@
 package com.example.demo.entity;
 
-import java.util.Date;
+import org.springframework.util.CollectionUtils;
+import org.springframework.util.StringUtils;
 
-public class User {
-    private Integer id;
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
-    private String name;
 
-    private String sex;
+public class User implements Serializable {
+    private Long id; //编号
+    private Long organizationId; //所属公司
+    private String username; //用户名
+    private String password; //密码
+    private String salt; //加密密码的盐
+    private List<Long> roleIds; //拥有的角色列表
+    private Boolean locked = Boolean.FALSE;
+    private String roleIdsStr;
 
-    private String account;
+    public User() {
+    }
 
-    private String password;
+    public User(String username, String password) {
+        this.username = username;
+        this.password = password;
+    }
 
-    private String email;
-
-    private String phone;
-
-    private Date createtime;
-
-    private String address;
-
-    private Date birthday;
-
-    private Date lasttime;
-
-    private Integer state;
-
-    public Integer getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
-    public String getName() {
-        return name;
+    public Long getOrganizationId() {
+        return organizationId;
     }
 
-    public void setName(String name) {
-        this.name = name == null ? null : name.trim();
+    public void setOrganizationId(Long organizationId) {
+        this.organizationId = organizationId;
     }
 
-    public String getSex() {
-        return sex;
+    public String getUsername() {
+        return username;
     }
 
-    public void setSex(String sex) {
-        this.sex = sex == null ? null : sex.trim();
-    }
-
-    public String getAccount() {
-        return account;
-    }
-
-    public void setAccount(String account) {
-        this.account = account == null ? null : account.trim();
+    public void setUsername(String username) {
+        this.username = username;
     }
 
     public String getPassword() {
@@ -64,62 +55,93 @@ public class User {
     }
 
     public void setPassword(String password) {
-        this.password = password == null ? null : password.trim();
+        this.password = password;
     }
 
-    public String getEmail() {
-        return email;
+    public String getSalt() {
+        return salt;
     }
 
-    public void setEmail(String email) {
-        this.email = email == null ? null : email.trim();
+    public void setSalt(String salt) {
+        this.salt = salt;
     }
 
-    public String getPhone() {
-        return phone;
+    public String getCredentialsSalt() {
+        return username + salt;
     }
 
-    public void setPhone(String phone) {
-        this.phone = phone == null ? null : phone.trim();
+    public List<Long> getRoleIds() {
+        if(roleIds == null) {
+            roleIds = new ArrayList<Long>();
+        }
+        return roleIds;
     }
 
-    public Date getCreatetime() {
-        return createtime;
+    public void setRoleIds(List<Long> roleIds) {
+        this.roleIds = roleIds;
     }
 
-    public void setCreatetime(Date createtime) {
-        this.createtime = createtime;
+
+    public String getRoleIdsStr() {
+        if(CollectionUtils.isEmpty(roleIds)) {
+            return "";
+        }
+        StringBuilder s = new StringBuilder();
+        for(Long roleId : roleIds) {
+            s.append(roleId);
+            s.append(",");
+        }
+        return s.toString();
     }
 
-    public String getAddress() {
-        return address;
+    public void setRoleIdsStr(String roleIdsStr) {
+        if(StringUtils.isEmpty(roleIdsStr)) {
+            return;
+        }
+        String[] roleIdStrs = roleIdsStr.split(",");
+        for(String roleIdStr : roleIdStrs) {
+            if(StringUtils.isEmpty(roleIdStr)) {
+                continue;
+            }
+            getRoleIds().add(Long.valueOf(roleIdStr));
+        }
+    }
+    
+    public Boolean getLocked() {
+        return locked;
     }
 
-    public void setAddress(String address) {
-        this.address = address == null ? null : address.trim();
+    public void setLocked(Boolean locked) {
+        this.locked = locked;
     }
 
-    public Date getBirthday() {
-        return birthday;
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        User user = (User) o;
+
+        if (id != null ? !id.equals(user.id) : user.id != null) return false;
+
+        return true;
     }
 
-    public void setBirthday(Date birthday) {
-        this.birthday = birthday;
+    @Override
+    public int hashCode() {
+        return id != null ? id.hashCode() : 0;
     }
 
-    public Date getLasttime() {
-        return lasttime;
-    }
-
-    public void setLasttime(Date lasttime) {
-        this.lasttime = lasttime;
-    }
-
-    public Integer getState() {
-        return state;
-    }
-
-    public void setState(Integer state) {
-        this.state = state;
+    @Override
+    public String toString() {
+        return "User{" +
+                "id=" + id +
+                ", organizationId=" + organizationId +
+                ", username='" + username + '\'' +
+                ", password='" + password + '\'' +
+                ", salt='" + salt + '\'' +
+                ", roleIds=" + roleIds +
+                ", locked=" + locked +
+                '}';
     }
 }

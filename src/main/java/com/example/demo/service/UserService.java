@@ -3,15 +3,54 @@ package com.example.demo.service;
 import com.example.demo.entity.User;
 
 import java.util.List;
+import java.util.Set;
 
 /**
  * Created by HP on 2018/1/25.
  */
 public interface UserService
 {
-    User getById(Integer id);
-    Integer create(User user);
-    int update(User user);
-    int delete(Integer id);
-    User getByUserName(String userName);
+    /**
+     * 创建用户
+     * @param user
+     */
+    public User createUser(User user);
+
+    public User updateUser(User user);
+
+    public void deleteUser(Long userId);
+
+    /**
+     * 修改密码
+     * @param userId
+     * @param newPassword
+     */
+    public void changePassword(Long userId, String newPassword);
+
+
+    User findOne(Long userId);
+
+    List<User> findAll(User user);
+
+    /**
+     * 根据用户名查找用户
+     * @param username
+     * @return
+     */
+    public User findByUsername(String username);
+
+    /**
+     * 根据用户名查找其角色
+     * @param username
+     * @return
+     */
+    public Set<String> findRoles(String username);
+
+    /**
+     * 根据用户名查找其权限
+     * @param username
+     * @return
+     */
+    public Set<String> findPermissions(String username);
+
 }

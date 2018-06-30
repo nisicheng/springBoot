@@ -21,8 +21,7 @@ public class LoginController {
     public String login(User user){
 
         Subject subject = SecurityUtils.getSubject();
-        UsernamePasswordToken token = new UsernamePasswordToken(user.getName(), user.getPassword());
-        System.out.println("11111");
+        UsernamePasswordToken token = new UsernamePasswordToken(user.getUsername(), user.getPassword());
         try {
            subject.login(token);
             return "ok";
@@ -33,8 +32,8 @@ public class LoginController {
     @RequestMapping(value = "/loguser")
     public User user(){
         User user=new User();
-        user.setName("张三");
-        user.setId(1);
+        user.setUsername("张三");
+        user.setId(1L);
         return  user;
     }
 }
