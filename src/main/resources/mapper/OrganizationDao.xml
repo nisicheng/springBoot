@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "mybatis-3-mapper.dtd" >
+<mapper namespace="com.example.demo.dao.OrganizationDao">
+    <resultMap id="organizationMap" type="com.example.demo.entity.Organization">
+
+    </resultMap>
+
+    <select id="findOne" resultMap="organizationMap">
+        select id, name, parent_id, parent_ids, available from sys_organization where id=#{id}
+    </select>
+
+    <select id="findAll" resultMap="organizationMap">
+        select id, name, parent_id, parent_ids, available from sys_organization
+    </select>
+    <select id="findAllWithExclude">
+        select id, name, parent_id, parent_ids, available from sys_organization where id!=#{id}
+        and parent_ids not like #{parentIds}
+    </select>
+</mapper>

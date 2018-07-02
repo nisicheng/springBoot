@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "mybatis-3-mapper.dtd" >
+<mapper namespace="com.example.demo.dao.RoleDao">
+    <resultMap id="roleMap" type="com.example.demo.entity.Role">
+
+    </resultMap>
+    <select id="findAll" resultMap="roleMap">
+        select id, role, description, resource_ids as resourceIdsStr, available from sys_role
+    </select>
+
+    <select id="findOne" resultMap="roleMap">
+        select id, role, description, resource_ids as resourceIdsStr, available from sys_role where id=#{id}
+    </select>
+</mapper>
