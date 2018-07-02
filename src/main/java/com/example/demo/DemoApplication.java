@@ -8,9 +8,9 @@ import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import org.springframework.web.filter.CorsFilter;
 
-@MapperScan("com.example.demo.dao")
-@SpringBootApplication
 
+@SpringBootApplication
+@MapperScan("com.example.demo.dao")
 public class DemoApplication {
 
 	public static void main(String[] args) {

@@ -1,77 +1,84 @@
 package com.example.demo.shiro;
 
-import com.example.demo.entity.Permission;
-import com.example.demo.entity.Role;
+
 import com.example.demo.entity.User;
-import com.example.demo.service.PermissionService;
 import com.example.demo.service.UserService;
-import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.*;
 import org.apache.shiro.authz.AuthorizationInfo;
 import org.apache.shiro.authz.SimpleAuthorizationInfo;
 import org.apache.shiro.realm.AuthorizingRealm;
-import org.apache.shiro.session.Session;
 import org.apache.shiro.subject.PrincipalCollection;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.apache.shiro.util.ByteSource;
 import org.springframework.beans.factory.annotation.Autowired;
 
 /**
  * Created by cdyoue on
  */
+    public class ShiroRealm extends AuthorizingRealm {
 
-public class ShiroRealm extends AuthorizingRealm {
-    private Logger logger =  LoggerFactory.getLogger(this.getClass());
+        @Autowired
+        private UserService userService;
 
-    @Autowired
-    private UserService userService;
-    @Autowired
-    private PermissionService permissionService;
-    @Override
-    protected AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection principalCollection) {
-        //logger.info("doGetAuthorizationInfo+"+principalCollection.toString());
-        User user = userService.getByUserName((String) principalCollection.getPrimaryPrincipal());
-
-
-        //把principals放session中 key=userId value=principals
-        SecurityUtils.getSubject().getSession().setAttribute(String.valueOf(user.getId()),SecurityUtils.getSubject().getPrincipals());
-
-        SimpleAuthorizationInfo info = new SimpleAuthorizationInfo();
-        //赋予角色
-       // for(Role userRole:user.getRoles(){
-        //    info.addRole(userRole.getName());
-      //  }
-        //赋予权限
-        for(Permission permission:permissionService.getByUserId(user.getId())){
-//            if(StringUtils.isNotBlank(permission.getPermCode()))
-            info.addStringPermission(permission.getName());
+        // 为当前登陆成功的用户授予权限和角色，已经登陆成功了
+        @Override
+        protected AuthorizationInfo doGetAuthorizationInfo(
+                PrincipalCollection principals) {
+            String username = (String)principals.getPrimaryPrincipal();
+            SimpleAuthorizationInfo authorizationInfo = new SimpleAuthorizationInfo();
+            authorizationInfo.setRoles(userService.findRoles(username));
+            authorizationInfo.setStringPermissions(userService.findPermissions(username));
+            return authorizationInfo;
         }
 
-        //设置登录次数、时间
-//        userService.updateUserLogin(user);
-        return info;
-    }
+        // 验证当前登录的用户，获取认证信息
+        @Override
+        protected AuthenticationInfo doGetAuthenticationInfo(
+                AuthenticationToken token) throws AuthenticationException {
+            String username = (String) token.getPrincipal(); // 获取用户名
+            User user = userService.findByUsername(username);
+            if (user == null) {
+                throw new UnknownAccountException();
+            }
+            // 判断帐号是否锁定
+            if (Boolean.TRUE.equals(user.getLocked())) {
+                // 抛出 帐号锁定异常
+                throw new LockedAccountException();
+            }
 
-    @Override
-    protected AuthenticationInfo doGetAuthenticationInfo(AuthenticationToken authenticationToken) throws AuthenticationException {
-       // logger.info("doGetAuthenticationInfo +"  + authenticationToken.toString());
-
-        UsernamePasswordToken token = (UsernamePasswordToken) authenticationToken;
-        String userName=token.getUsername();
-       // logger.info(userName+token.getPassword());
-
-        User user = userService.getByUserName(token.getUsername());
-        if (user != null) {
-//            byte[] salt = Encodes.decodeHex(user.getSalt());
-//            ShiroUser shiroUser=new ShiroUser(user.getId(), user.getLoginName(), user.getName());
-            //设置用户session
-            Session session = SecurityUtils.getSubject().getSession();
-            session.setAttribute("user", user);
-            return new SimpleAuthenticationInfo(userName,user.getPassword(),getName());
-        } else {
-            return null;
+            // 交给AuthenticatingRealm使用CredentialsMatcher进行密码匹配
+            SimpleAuthenticationInfo authenticationInfo = new SimpleAuthenticationInfo(
+                    user.getUsername(), // 用户名
+                    user.getPassword(), // 密码
+                    ByteSource.Util.bytes(user.getCredentialsSalt()),// salt=username+salt
+                    getName() // realm name
+            );
+            return authenticationInfo;
         }
-//        return null;
-    }
+        @Override
+        public void clearCachedAuthorizationInfo(PrincipalCollection principals) {
+            super.clearCachedAuthorizationInfo(principals);
+        }
 
-}
+        @Override
+        public void clearCachedAuthenticationInfo(PrincipalCollection principals) {
+            super.clearCachedAuthenticationInfo(principals);
+        }
+
+        @Override
+        public void clearCache(PrincipalCollection principals) {
+            super.clearCache(principals);
+        }
+
+        public void clearAllCachedAuthorizationInfo() {
+            getAuthorizationCache().clear();
+        }
+
+        public void clearAllCachedAuthenticationInfo() {
+            getAuthenticationCache().clear();
+        }
+
+        public void clearAllCache() {
+            clearAllCachedAuthenticationInfo();
+            clearAllCachedAuthorizationInfo();
+        }
+    }

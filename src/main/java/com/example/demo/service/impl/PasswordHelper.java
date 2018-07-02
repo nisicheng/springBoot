@@ -17,9 +17,9 @@ public class PasswordHelper {
 
     private RandomNumberGenerator randomNumberGenerator = new SecureRandomNumberGenerator();
 
-    @Value("${password.algorithmName}")
+    @Value("md5")
     private String algorithmName = "md5";
-    @Value("${password.hashIterations}")
+    @Value("2")
     private int hashIterations = 2;
 
     public void setRandomNumberGenerator(RandomNumberGenerator randomNumberGenerator) {

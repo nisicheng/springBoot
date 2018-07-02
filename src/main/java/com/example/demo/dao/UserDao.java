@@ -2,14 +2,14 @@ package com.example.demo.dao;
 
 
 import com.example.demo.entity.User;
-
+import org.springframework.stereotype.Repository;
 import java.util.List;
-
+@Repository
 public interface UserDao {
 
-    public User createUser(User user);
-    public User updateUser(User user);
-    public void deleteUser(Long userId);
+     User createUser(User user);
+     User updateUser(User user);
+     void deleteUser(Long userId);
 
     User findOne(Long userId);
 
